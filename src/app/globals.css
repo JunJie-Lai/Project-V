@@ -16,6 +16,11 @@ html, body, :root {
     display: none;
 }
 
+.search-border {
+    border-color: rgba(255, 183, 197, 0.7);
+}
+  
+
 @layer base {
     :root {
         --background: 0 0% 100%;
