@@ -1,14 +1,16 @@
+import {nextui} from '@nextui-org/theme';
 import { withUt } from "uploadthing/tw";
 import type { Config } from "tailwindcss"
 
 const config = withUt({
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    "./src/**/*.{ts,tsx,mdx}"
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/components/(calendar|date-picker|button|ripple|spinner|date-input|popover).js"
+  ],
   prefix: "",
   theme: {
     container: {
@@ -79,7 +81,7 @@ const config = withUt({
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),nextui()],
 }) satisfies Config
 
 export default config
