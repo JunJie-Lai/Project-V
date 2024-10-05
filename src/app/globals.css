@@ -4,7 +4,7 @@
 
 html, body, :root {
     height: 100%;
-    @apply bg-neutral-900/80;
+    @apply bg-[#111111]/80;
 }
 
 .hidden-scrollbar {
@@ -19,7 +19,10 @@ html, body, :root {
 .search-border {
     border-color: rgba(255, 183, 197, 0.7);
 }
-  
+
+.navbar-bg {
+    background-color: rgba(37, 39, 49, 0.7);
+}
 
 @layer base {
     :root {
@@ -54,7 +57,7 @@ html, body, :root {
         --radius: 0.5rem;
     }
     .dark {
-        --background: 226.7 12.7% 13.9%;
+        --background: 228, 9%, 11%;
         --foreground: 210 40% 98%;
 
         --card: 226.7 12.7% 13.9%;

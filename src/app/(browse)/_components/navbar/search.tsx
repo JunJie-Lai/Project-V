@@ -32,7 +32,7 @@ export const Search = () => {
                 <X onClick={onClear}
                    className={"absolute top-2.5 right-14 h-5 w-5 text-muted-foreground cursor-pointer hover:opacity-75 transition"}
                 />)}
-            <Button type={"submit"} variant={"secondary"} className={"rounded-l-none bg-[#1e2128] border-r border-t border-b search-border"}>
+            <Button type={"submit"} variant={"secondary"} className={"rounded-l-none bg-background border-r border-t border-b search-border"}>
                 <SearchIcon className="h-5 w-5 text-[#FFB7C5]"/>
             </Button>
         </form>
