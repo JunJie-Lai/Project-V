@@ -40,34 +40,13 @@ const SchedulePage = () => {
         return `${hour}:00${suffix}`;
     });
 
-    // Function to generate schedule columns
-   /* const renderColumns = () =>
-        days.map((day, i) => (
-            <div key={i} className="flex flex-col justify-center items-center w-[11vw]">
-                <div className="w-full h-[9vh] flex justify-center items-center border-[#FFB7C5] border-2 border-b-0 border-l-0 border-r-2 border-t-0 relative mr-[7.3em]">
-                    <span className="mb-11 absolute mr-10">{day}</span>
-                    <span className="text-5xl ml-20 -mb-4 mr-4">{dates[i]}</span>
-                </div>
-                {times.map((time, j) => {
-                    const isScheduled = scheduledSlots[dates[i]] && scheduledSlots[dates[i]].includes(time);
-                    return (
-                        <div
-                            key={j}
-                            className={`text-[#171717] mr-32 w-[13.9em] h-8 flex justify-center items-center border-[#FFB7C5] border-2 border-b-0 border-l-0 ${isScheduled ? 'bg-[#FFB7C5]' : ''}`}
-                        >
-                            {time}
-                        </div>
-                    );
-                })}
-            </div>
-        )); */
 
     const renderColumns = () =>
         days.map((day, i) => (
-            <div key={i} className="flex flex-col justify-center items-center w-1/7">  {/* Use w-1/7 for equal width */}
+            <div key={i} className="flex flex-col justify-center items-center w-1/7">
                 <div className="w-full h-[9vh] flex flex-col justify-center items-center border-[#FFB7C5] border-2 border-b-0 border-l-0 border-r-2 border-t-0 relative">
-                    <span className="mb-11 absolute mr-10">{day}</span>  {/* Adjust spacing and remove absolute positioning */}
-                    <span className="text-5xl ml-20 -mb-4 mr-4">{dates[i]}</span>  {/* Adjust font size and remove unnecessary margins */}
+                    <span className="mb-11 absolute mr-10">{day}</span> 
+                    <span className="text-5xl ml-20 -mb-4 mr-4">{dates[i]}</span> 
                 </div>
                 {times.map((time, j) => {
                     const isScheduled = scheduledSlots[dates[i]] && scheduledSlots[dates[i]].includes(time);
