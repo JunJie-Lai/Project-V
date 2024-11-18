@@ -20,6 +20,10 @@ model User {
   imageURL       String  @db.Text
   externalUserID String  @unique
   bio            String? @db.Text
+  startDay       String? @db.Text
+  endDay         String? @db.Text
+  startTime      String? @db.Text
+  endTime        String? @db.Text
 
   following  Follow[] @relation("Following")
   followedBy Follow[] @relation("FollowedBy")
