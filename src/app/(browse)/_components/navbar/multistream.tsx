@@ -60,10 +60,10 @@ export const MultiStream = ({userList}: MultiStreamProps) => {
                         ))}
                         
                         <div className="flex justify-between">
-                            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => setIsModalOpen(false)}>
+                            <button className="bg-gray-600 text-white px-4 py-2 rounded" onClick={() => setIsModalOpen(false)}>
                                 Close
                             </button>
-                            <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={() => {
+                            <button className="bg-[#FF7590] text-white px-4 py-2 rounded" onClick={() => {
                                 const baseUser = searchValues[0];
                                 if (!baseUser || !suggestions.includes(baseUser)) {
                                     alert("The first user must be filled in and match a valid suggestion.");

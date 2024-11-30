@@ -34,13 +34,23 @@ const UserPage = async ({params, searchParams}: UserPageProps) => {
     const additionalUsers = await Promise.all(
         additionalUsernames.map((username) => getUserByUsername(username))
     );
-    
-    if (additionalUsers.every(user => user === null)) {
+    const filteredUsers = additionalUsers.filter(user => user !== null);
+
+    if (filteredUsers.length === 0) {
         return <StreamPlayer user={user} stream={user.stream} isFollowing={isFollowing}/>
     }
 
+    const additionalFollows = await Promise.all(
+        filteredUsers.map(async (user) => {
+            if (user) {
+                return await isFollowingUser(user.id);
+            }
+            return false;
+        })
+    );
+
     return (
-        <MultiStreamPlayer user={user} users={additionalUsers} stream={user.stream} isFollowing={isFollowing}/>
+        <MultiStreamPlayer user={user} users={filteredUsers}/>
     )
 }
 

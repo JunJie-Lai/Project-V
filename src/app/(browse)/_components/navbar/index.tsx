@@ -2,7 +2,7 @@ import {Logo} from "@/app/(browse)/_components/navbar/logo";
 import {Search} from "@/app/(browse)/_components/navbar/search";
 import {MultiStream} from "@/app/(browse)/_components/navbar/multistream";
 import {Actions} from "@/app/(browse)/_components/navbar/actions";
-import { getUsernames } from "@/lib/user-service";
+import {getUsernames} from "@/lib/user-service";
 
 export const Navbar = async () => {
     const usernames = await getUsernames()

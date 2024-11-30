@@ -1,15 +1,14 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
-import {useViewerToken} from "@/hooks/use-viewer-token";
 import {LiveKitRoom} from "@livekit/components-react";
 import {Video, VideoSkeleton} from "@/components/stream-player/video";
 import {useChatSidebar} from "@/store/use-chat-sidebar";
-import {cn} from "@/lib/utils";
-import {Chat, ChatSkeleton} from "@/components/stream-player/chat";
-import {ChatToggle} from "@/components/stream-player/chat-toggle";
-import {Header, HeaderSkeleton} from "@/components/stream-player/header";
-import {InfoCard} from "@/components/stream-player/info-card";
-import {AboutCard} from "@/components/stream-player/about-card";
+import {ChatSkeleton} from "@/components/stream-player/chat";
+import {HeaderSkeleton} from "@/components/stream-player/header";
+import {useMultipleViewerToken} from "@/hooks/use-multiple-viewer-tokens";
+import {useState} from "react";
+import Link from "next/link";
 
 type CustomStream = {
     id: string
@@ -34,56 +33,79 @@ type CustomUser = {
 
 interface StreamPlayerProps {
     user: CustomUser
-    users: (CustomUser | null)[]
-    stream: CustomStream
-    isFollowing: boolean
+    users: (CustomUser)[]
 }
 
-export const MultiStreamPlayer = ({user, users, stream, isFollowing}: StreamPlayerProps) => {
-    const {token, name, identity} = useViewerToken(user.id)
-    const {collapsed} = useChatSidebar((state) => state)
-
-    if (!token || !name || !identity) return <MultiStreamPlayerSkeleton/>
+export const MultiStreamPlayer = ({user, users}: StreamPlayerProps) => {
+    const allUsers = [user, ...users];
+    const uniqueUsers = Array.from(new Set(allUsers.map((u) => u.id))).map(
+        (id) => allUsers.find((u) => u.id === id)!
+    );
+    const {tokens, names, identities} = useMultipleViewerToken(uniqueUsers.map((user) => user.id));
+    if (!tokens || !names || !identities) return <MultiStreamPlayerSkeleton/>
+    const [activeTab, setActiveTab] = useState('All');
 
     return (
         <>
-            {collapsed && (
-                <div className={"hidden lg:block fixed top-[100px] right-2 z-50"}>
-                    <ChatToggle/>
-                </div>
-            )}
-            <LiveKitRoom serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL} token={token}
-                         className={cn("grid grid-cols-1 lg:gap-y-0 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 h-full",
-                             collapsed && "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2")}>
-                <div
-                    className={"space-y-4 col-span-1 lg:col-span-2 xl:col-span-2 2xl:col-span-5 lg:overflow-y-auto hidden-scrollbar pb-10"}>
-                    <div className={"grid grid-cols-2 gap-2"}>
-                        <Video hostName={user.username} hostIdentity={user.id}/>
-                        {users[0] && (
-                            <Video hostName={users[0].username} hostIdentity={users[0].id} />
+            <div className={"grid grid-cols-1 lg:gap-y-0 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 h-full"}>
+                <div className={"space-y-4 col-span-1 lg:col-span-2 xl:col-span-2 2xl:col-span-5 lg:overflow-y-auto hidden-scrollbar pb-10"}>
+                    <div className={uniqueUsers.length > 1 ? "grid grid-cols-2" : ""}>
+                        {activeTab === 'All' ? (
+                            uniqueUsers.map((user, index) => (
+                                <LiveKitRoom key={user.id} serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL} token={tokens[index]}>
+                                    <Video hostName={user.username} hostIdentity={user.id} />
+                                </LiveKitRoom>
+                            ))
+                        ) : (
+                            uniqueUsers.map((user, index) => (
+                                activeTab === user.username && (
+                                    <LiveKitRoom key={user.id} serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL} token={tokens[index]} className="col-span-full">
+                                        <Video hostName={user.username} hostIdentity={user.id} />
+                                    </LiveKitRoom>
+                                )
+                            ))
                         )}
-                        {users[1] && (
-                            <Video hostName={users[1].username} hostIdentity={users[1].id} />
-                        )}
-                        {users[2] && (
-                            <Video hostName={users[2].username} hostIdentity={users[2].id} />
-                        )}
-
                     </div>
-                    
-                    <Header hostName={user.username} hostIdentity={user.id} viewerIdentity={identity}
-                            imageURL={user.imageURL} isFollowing={isFollowing} name={stream.name}/>
-                    <InfoCard hostIdentity={user.id} viewerIdentity={identity} name={stream.name}
-                              thumbnailUrl={stream.thumbnailUrl}/>
-                    <AboutCard hostName={user.username} hostIdentity={user.id} viewerIdentity={identity} bio={user.bio}
-                               followedByCount={user._count.followedBy}/>
+                    <div>
+                        <div className="mx-auto">
+                            <div className="flex">
+                                <button onClick={() => setActiveTab('All')} className={`flex-1 p-2 text-center ${activeTab === 'All' ? "border-b-2 border-[#FF7590] font-bold" : "text-gray-500"}`}>
+                                    All
+                                </button>
+                                {uniqueUsers.map((tab) => (
+                                    <button key={tab.username} onClick={() => setActiveTab(tab.username!)} className={`flex-1 p-2 text-center ${activeTab === tab.username? "border-b-2 border-[#FF7590] font-bold": "text-gray-500"}`}>
+                                        {tab.username}
+                                    </button>
+                                ))}
+                            </div>
+                            <div>
+                                {uniqueUsers.map((tab) => (
+                                    <div key={tab.username} className={`tab-pane ${activeTab === tab.username}`}>
+                                        {activeTab === tab.username && (
+                                            <div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>   
+                        </div>
+                    </div>
+                    <p className="text-center text-lg font-semibold">Adjust stream perspectives</p>
                 </div>
-                <div className={cn("col-span-1", collapsed && "hidden")}>
-                    <Chat viewerName={name} hostName={user.username} hostIdentity={user.id} isFollowing={isFollowing}
-                          isChatEnabled={stream.isChatEnabled} isChatDelayed={stream.isChatDelayed}
-                          isChatFollowersOnly={stream.isChatFollowersOnly}/>
+                <div className={"col-span-1 bg-background"}>
+                    <div className="p-4">
+                        <h2 className="text-lg font-bold">Profile Navigation</h2>
+                        <div className="grid grid-cols-1 gap-4 mt-4">
+                            {uniqueUsers.map((user) => (
+                                <Link key={user.username} href={`/${user.username}`} className="block p-4 border rounded-lg hover:bg-gray-500 hover:bg-opacity-10">
+                                    <img src={user.imageURL} alt={user.username} className="w-16 h-16 rounded-full mx-auto" />
+                                    <h3 className="mt-2 text-center text-lg font-semibold">{user.username}</h3>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </LiveKitRoom>
+            </div>
         </>
     )
 }
