@@ -30,7 +30,7 @@ export const Thumbnail = ({src, fallback, isLive, username}: ThumbnailProps) => 
     return (
         <div className={"group aspect-video relative rounded-md cursor-pointer"}>
             <div
-                className={"rounded-md absolute inset-0 bg-[#FFB7C5]/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"}/>
+                className={"rounded-md absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"}/>
             {content}
             {isLive && src && (
                 <div

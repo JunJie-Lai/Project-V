@@ -43,11 +43,3 @@ export const getUserById = async (id: string) => {
     })
     return user
 }
-export const getUsernames = async () => {
-    const users = await db.user.findMany({
-        select: {
-            username: true,
-        }
-    });
-    return users.map(user => user.username);
-}
