@@ -9,16 +9,15 @@ const SchedulePage = async () => {
     const user = await getScheduleByUsername(self.username);
     const schedule = user.schedule || [];
 
-    //console.log(schedule[1])
-
     const currentWeekStart = new Date();
+    currentWeekStart.setHours(0, 0, 0, 0);
+
     const times = Array.from({ length: 24 }, (_, i) => {
         const hour = i % 12 || 12;
         const suffix = i < 12 ? "am" : "pm";
         return `${hour}:00${suffix}`;
     });
 
-    // Generate date and day arrays
     const generateDates = () => {
         return Array.from({ length: 7 }, (_, i) => {
             const futureDate = new Date(currentWeekStart);
@@ -27,32 +26,24 @@ const SchedulePage = async () => {
         });
     };
 
-    const generateDays = () => {
+    const generateDays = (startDay) => {
         return Array.from({ length: 7 }, (_, i) => {
-            const dayIndex = (currentWeekStart.getDay() + i) % 7;
+            const dayIndex = (startDay + i) % 7;
             return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayIndex];
         });
     };
-
+    
+    const days = generateDays(currentWeekStart.getDay());
     const dates = generateDates();
-    const days = generateDays();
+
+    // Check if a given time falls within a schedule's start and end time
+    const isScheduledTime = (currentDay, currentTime) => {
+        if (!schedule || schedule.length === 0) return false;
+
+        return schedule.some(({ day, time }) => day === currentDay && time === currentTime);
+    };
 
     const renderColumns = () => {
-        const dayIndices = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-        const parseTime = (timeString) => {
-            const [hour, minute] = timeString.split(/[: ]/);
-            const suffix = timeString.includes("pm") && hour !== "12" ? 12 : 0;
-            return (+hour % 12 + suffix) * 60 + (+minute || 0);
-        };
-
-        const isScheduledTime = (currentDay, currentTime) => {
-            if (!schedule || schedule.length === 0) return false;
-
-            return schedule.some(({ day, time }) => day === currentDay && time === currentTime);
-        };
-
-
         return days.map((day, i) => (
             <div key={i} className="flex flex-col justify-center items-center w-1/7">
                 <div className="w-full h-[9vh] flex flex-col justify-center items-center border-[#FFB7C5] border-2 border-b-0 border-l-0 border-r-2 border-t-0 relative">
@@ -75,6 +66,7 @@ const SchedulePage = async () => {
             </div>
         ));
     };
+
 
     return (
         <main className="text-white mb-4 ml-4 bg-[#171717] min-h-screen">

@@ -21,42 +21,44 @@ const editSchedulePage = () => {
     const saveSchedule = async () => {
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const times = Array.from({ length: 24 }, (_, i) => {
-          const hour = i % 12 || 12;
-          const suffix = i < 12 ? "am" : "pm";
-          return `${hour}:00${suffix}`;
+            const hour = i % 12 || 12;
+            const suffix = i < 12 ? "am" : "pm";
+            return `${hour}:00${suffix}`;
         });
-    
-        const schedule = Object.keys(clickedStates)
-          .filter((key) => clickedStates[key]) // Only include clicked cells
-          .map((key) => {
-            const [dayIndex, timeIndex] = key.split("-").map(Number);
-            return {
-              day: days[dayIndex],
-              time: times[timeIndex],
-            };
-          });
-    
-        try {
-          const response = await fetch("/schedule", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, schedule }),
-          });
-    
-          if (response.ok) {
-            alert("Schedule saved successfully!");
-          } else {
-            alert("Failed to save schedule.");
-          }
-        } catch (error) {
-          console.error("Error saving schedule:", error);
-          alert("An error occurred while saving the schedule.");
-        }
-      };
 
-    const currentWeekStart = new Date(); // Initialize current week start
+        const schedule = Object.keys(clickedStates)
+            .filter((key) => clickedStates[key])
+            .map((key) => {
+                const [dayIndex, timeIndex] = key.split("-").map(Number);
+                return {
+                    day: days[dayIndex],
+                    time: times[timeIndex],
+                };
+            });
+
+        try {
+            const response = await fetch("/api/schedule", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, schedule }),
+            });
+
+            if (response.ok) {
+                //alert("Schedule data sent successfully!");
+            } else {
+                alert("Failed to send schedule data.");
+            }
+        } catch (error) {
+            console.error("Error sending schedule:", error);
+            alert("An error occurred while sending the schedule.");
+        }
+    };
+
+    const currentWeekStart = new Date();
+    currentWeekStart.setHours(0, 0, 0, 0); 
+
     const times = Array.from({ length: 24 }, (_, i) => {
         const hour = i % 12 || 12;
         const suffix = i < 12 ? "am" : "pm";
@@ -72,15 +74,15 @@ const editSchedulePage = () => {
         });
     };
 
-    const generateDays = () => {
+    const generateDays = (startDay) => {
         return Array.from({ length: 7 }, (_, i) => {
-            const dayIndex = (currentWeekStart.getDay() + i) % 7;
+            const dayIndex = (startDay + i) % 7;
             return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayIndex];
         });
     };
-
+    
+    const days = generateDays(currentWeekStart.getDay());
     const dates = generateDates();
-    const days = generateDays();
 
     // Render columns with schedule data
     const renderColumns = () =>

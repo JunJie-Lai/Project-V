@@ -20,7 +20,7 @@ model User {
   imageURL       String  @db.Text
   externalUserID String  @unique
   bio            String? @db.Text
-  schedule       Json
+  schedule       Json?
 
   following  Follow[] @relation("Following")
   followedBy Follow[] @relation("FollowedBy")
