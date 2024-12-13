@@ -15,15 +15,12 @@ datasource db {
 }
 
 model User {
-  id             String  @id @default(uuid())
+  id             String  @id @default(cuid())
   username       String  @unique
   imageURL       String  @db.Text
   externalUserID String  @unique
   bio            String? @db.Text
-  startDay       String? @db.Text
-  endDay         String? @db.Text
-  startTime      String? @db.Text
-  endTime        String? @db.Text
+  schedule       Json?
 
   following  Follow[] @relation("Following")
   followedBy Follow[] @relation("FollowedBy")
