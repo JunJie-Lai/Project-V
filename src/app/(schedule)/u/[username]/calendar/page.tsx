@@ -66,7 +66,6 @@ const SchedulePage = async () => {
         ));
     };
 
-
     return (
         <main className="text-white mb-4 ml-4 bg-[#171717] min-h-screen">
             <title>Schedule</title>
