@@ -2,7 +2,7 @@
 Project V is a livestreaming application dedicated to VTubers that supports multistreaming, allowing you to watch four streams at once.
 
 ## Initial Setup
-Download the project code and unzip it into the desired location.
+Download the project from the [repository](https://github.com/JunJie-Lai/Project-V) and unzip it into the desired location.
 
 Next open a terminal in the project directory where you will see all of the project files including `ngrok.exe` and `README.md`.
 * We recommend [Visual Studio Code](https://code.visualstudio.com/download) as it has a built in terminal when opening the project.
