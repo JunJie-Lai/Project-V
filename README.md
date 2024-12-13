@@ -61,10 +61,10 @@ In your dashboard on the Configure tab:
 
 Navigate to "Email, phone, username" on the sidebar:
 * You can toggle how Clerk handles account creation, where we recommend:
- * Recommended to enable email address and make it optional.
- * Enable username and make it required.
- * Password is enabled.
- * Allow users to delete their accounts.
+ 1. Enable email address and make it optional.
+ 2. Enable username and make it required.
+ 3. Password is enabled.
+ 4. Allow users to delete their accounts.
 
 Navigate to "Paths" on the sidebar and under Component Paths:
 * Ensure that Sign-in, Sign-up, and User Button are set to "Page on development host".
