@@ -20,10 +20,10 @@ Download and install [MySQL Workbench](https://dev.mysql.com/downloads/workbench
 Modify the `DATABASE_URL` field in `.env`.
 * [Documentation](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-mysql "Documentation")
 * Format: `DATABASE_URL = "mysql://USER:PASSWORD@HOST:PORT/DATABASE"`
- * USER: The name of your database user
- * PASSWORD: The password for your database user
- * PORT: The port where your database server is running (typically 3306 for MySQL)
- * DATABASE: The name of the database
+  * USER: The name of your database user
+  * PASSWORD: The password for your database user
+  * PORT: The port where your database server is running (typically 3306 for MySQL)
+  * DATABASE: The name of the database
 * Example: `DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"`
 
 In the terminal initialize the database with the commands:
@@ -39,7 +39,7 @@ Create your [Ngrok](https://ngrok.com/) account, in your dashboard:
 * Follow the instruction in [Setup & Installation](https://dashboard.ngrok.com/get-started/setup).
 * Navigate to [Domains](https://dashboard.ngrok.com/cloud-edge/domains):
     1. Select "New Domain".
-	2. Keep note of the Domain URL
+    2. Keep note of the Domain URL
 
 ## Clerk
 
@@ -61,10 +61,10 @@ In your dashboard on the Configure tab:
 
 Navigate to "Email, phone, username" on the sidebar:
 * You can toggle how Clerk handles account creation, where we recommend:
- 1. Enable email address and make it optional.
- 2. Enable username and make it required.
- 3. Password is enabled.
- 4. Allow users to delete their accounts.
+  * Enable email address and make it optional.
+  * Enable username and make it required.
+  * Password is enabled.
+  * Allow users to delete their accounts.
 
 Navigate to "Paths" on the sidebar and under Component Paths:
 * Ensure that Sign-in, Sign-up, and User Button are set to "Page on development host".
