@@ -1,4 +1,3 @@
-// app/api/schedule/route.js
 import { db } from "@/lib/db";
 
 export async function POST(req) {
@@ -18,5 +17,35 @@ export async function POST(req) {
     } catch (error) {
         console.error("Error saving schedule:", error);
         return new Response(JSON.stringify({ error: "Failed to save schedule to DB" }), { status: 500 });
+    }
+}
+
+export async function GET(req) {
+    try {
+        // Parse URL parameters from the request
+        const url = new URL(req.url);
+        const username = url.searchParams.get("username");
+
+        if (!username) {
+            return new Response(JSON.stringify({ error: "Username is required" }), { status: 400 });
+        }
+
+        // Fetch the user's schedule from the database
+        const user = await db.user.findUnique({
+            where: { username },
+            //select: { schedule: true },
+        });
+
+        if (!user || !user.schedule) {
+            return new Response(
+                JSON.stringify({ error: "Schedule not found for the given username" }),
+                { status: 404 }
+            );
+        }
+
+        return new Response(JSON.stringify({ schedule: user.schedule }), { status: 200 });
+    } catch (error) {
+        console.error("In route.js Error fetching schedule:", error);
+        return new Response(JSON.stringify({ error: "In route.js Failed to fetch schedule from DB" }), { status: 500 });
     }
 }

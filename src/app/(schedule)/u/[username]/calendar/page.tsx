@@ -2,13 +2,11 @@ import { getScheduleByUsername } from "@/lib/schedule-service";
 import { getSelf } from "@/lib/auth-service";
 import Link from "next/link"
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db"
 
 const SchedulePage = async () => {
     const self = await getSelf()
     const user = await getScheduleByUsername(self.username);
-    const schedule = user.schedule || [];
-
+    const schedule = user!.schedule || [];
     const currentWeekStart = new Date();
     currentWeekStart.setHours(0, 0, 0, 0);
 
@@ -26,7 +24,7 @@ const SchedulePage = async () => {
         });
     };
 
-    const generateDays = (startDay) => {
+    const generateDays = (startDay: any) => {
         return Array.from({ length: 7 }, (_, i) => {
             const dayIndex = (startDay + i) % 7;
             return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayIndex];
@@ -36,11 +34,12 @@ const SchedulePage = async () => {
     const days = generateDays(currentWeekStart.getDay());
     const dates = generateDates();
 
-    // Check if a given time falls within a schedule's start and end time
-    const isScheduledTime = (currentDay, currentTime) => {
-        if (!schedule || schedule.length === 0) return false;
 
-        return schedule.some(({ day, time }) => day === currentDay && time === currentTime);
+    const isScheduledTime = (currentDay: any, currentTime: any) => {
+        if(Array.isArray(schedule))
+        //if (!schedule || schedule.length === 0) 
+            //return false;
+            return schedule.some(({ day, time }:any) => day === currentDay && time === currentTime);
     };
 
     const renderColumns = () => {

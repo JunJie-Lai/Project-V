@@ -2,30 +2,70 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
+
 
 const editSchedulePage = () => {
     const searchParams = useSearchParams()
     let username = searchParams.get('search')
-    const [clickedStates, setClickedStates] = useState({});
+    const [clickedStates, setClickedStates] = useState<Record<string, boolean>>({});
 
-    const handleRectangleClick = (dayIndex, timeIndex) => {
+    const handleRectangleClick = (dayIndex: number, timeIndex: number) => {
         const key = `${dayIndex}-${timeIndex}`;
-        setClickedStates((prev) => ({
+        setClickedStates((prev: any) => ({
             ...prev,
-            [key]: !prev[key], // Toggle the state
+            [key]: !prev[key], 
         }));
     };
 
+    const loadSchedule = async () => {
+        try {
+            if(!username)
+                return
+            const response = await fetch(`/api/schedule?username=${encodeURIComponent(username)}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (response.ok) {
+                const { schedule } = await response.json();
+                const newClickedStates: Record<string, boolean> = {};
+                schedule.forEach(({ day, time }: {day:any; time:any}) => {
+                    const dayIndex = days.indexOf(day);
+                    const timeIndex = times.indexOf(time);
+    
+                    if (dayIndex !== -1 && timeIndex !== -1) {
+                        newClickedStates[`${dayIndex}-${timeIndex}`] = true;
+                    }
+                });
+    
+                setClickedStates(newClickedStates);
+            } else {
+                const errorData = await response.json();
+                //alert(`In edit_calendar Failed to fetch schedule: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error("In edit_calendar Error fetching schedule:", error);
+            //alert("In edit_calendar An error occurred while fetching the schedule." + error);
+        }
+    };
+    
+    useEffect(() => {
+        if (username) {
+            loadSchedule();
+        }
+    }, [username]);
+
     const saveSchedule = async () => {
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const times = Array.from({ length: 24 }, (_, i) => {
             const hour = i % 12 || 12;
             const suffix = i < 12 ? "am" : "pm";
             return `${hour}:00${suffix}`;
         });
-
+    
         const schedule = Object.keys(clickedStates)
             .filter((key) => clickedStates[key])
             .map((key) => {
@@ -35,7 +75,7 @@ const editSchedulePage = () => {
                     time: times[timeIndex],
                 };
             });
-
+    
         try {
             const response = await fetch("/api/schedule", {
                 method: "POST",
@@ -44,17 +84,19 @@ const editSchedulePage = () => {
                 },
                 body: JSON.stringify({ username, schedule }),
             });
-
+    
             if (response.ok) {
                 //alert("Schedule data sent successfully!");
             } else {
-                alert("Failed to send schedule data.");
+                const errorData = await response.json();
+                //alert(`Failed to send schedule data: ${errorData.error}`);
             }
         } catch (error) {
             console.error("Error sending schedule:", error);
-            alert("An error occurred while sending the schedule.");
+            //alert("An error occurred while sending the schedule.");
         }
     };
+    
 
     const currentWeekStart = new Date();
     currentWeekStart.setHours(0, 0, 0, 0); 
@@ -65,7 +107,6 @@ const editSchedulePage = () => {
         return `${hour}:00${suffix}`;
     });
 
-    // Generate date and day arrays
     const generateDates = () => {
         return Array.from({ length: 7 }, (_, i) => {
             const futureDate = new Date(currentWeekStart);
@@ -74,7 +115,7 @@ const editSchedulePage = () => {
         });
     };
 
-    const generateDays = (startDay) => {
+    const generateDays = (startDay:any) => {
         return Array.from({ length: 7 }, (_, i) => {
             const dayIndex = (startDay + i) % 7;
             return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayIndex];
@@ -84,7 +125,6 @@ const editSchedulePage = () => {
     const days = generateDays(currentWeekStart.getDay());
     const dates = generateDates();
 
-    // Render columns with schedule data
     const renderColumns = () =>
         days.map((day, i) => (
             <div key={i} className="flex flex-col justify-center items-center w-1/7">
