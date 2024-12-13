@@ -53,7 +53,6 @@ In your dashboard on the Configure tab:
 * Navigate to "Webhooks" on the sidebar:
     1. Select "Add Endpoint".
     2. Endpoint URL: https:// + Your Ngrok domain URL + /api/webhooks/clerk
-		Example: https://lucky-capybara-finally.ngrok-free.app/api/webhooks/clerk
     3. Subscribed Events: user.created, user.deleted, user.updated
     4. Select "Create".
     5. Once created, copy your "Signing Secret" to `CLERK_WEBHOOK_SECRET`.
@@ -80,7 +79,6 @@ Create your [LiveKit](https://livekit.io/) account and project, in your dashboar
        `LIVEKIT_API_SECRET`.
     3. Select "WEBHOOKS" -> "ADD NEW ENDPOINT".
     4. URL: https:// + Your Ngrok domain URL + /api/webhooks/livekit
-		Example: https://lucky-capybara-finally.ngrok-free.app/api/webhooks/livekit
 
 ## UploadThing
 
