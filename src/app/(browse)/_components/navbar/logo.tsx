@@ -20,7 +20,7 @@ export const Logo = () => {
                         Project V
                     </p>
                     <p className={"text-xs text-muted-foreground"}>
-                        Watch and Stream!
+                        Watch, Stream, Play!
                     </p>
                 </div>
             </div>
