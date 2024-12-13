@@ -22,8 +22,8 @@ export const InfoCard = ({hostIdentity, viewerIdentity, name, thumbnailUrl}: Inf
         <div className={"px-4"}>
             <div className={"rounded-xl bg-background"}>
                 <div className={"flex items-center gap-x-2.5 p-4"}>
-                    <div className={"rounded-md bg-blue-600 p-2 h-auto w-auto"}>
-                        <Pencil className={"h-5 w-5"}/>
+                    <div className={"rounded-md bg-[#FF7590]/90 p-2 h-auto w-auto"}>
+                        <Pencil className={"h-5 w-5 "}/>
                     </div>
                     <div>
                         <h2 className={"text-sm lg:text-lg font-semibold capitalize"}>
