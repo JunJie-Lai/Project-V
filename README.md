@@ -90,6 +90,8 @@ Create Your [UploadThing](https://uploadthing.com/) account and "Create a new ap
 ## Deployment
 In the project terminal, do `npm install next` to install the Next.js dependency.
 
+Also `npm install` to install the rest of the dependencies.
+
 Then, run the development server: `npm run dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
